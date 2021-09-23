@@ -1,10 +1,10 @@
-import * as React from "react";
+import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
+import * as React from "react";
+import Copyright from "../configs/mui/Copyright";
 import Link from "../configs/mui/Link";
 import ProTip from "../configs/mui/ProTip";
-import Copyright from "../configs/mui/Copyright";
 
 export default function Index() {
   return (
