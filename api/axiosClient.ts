@@ -1,8 +1,8 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 
 const axiosClient = axios.create({
-  // baseURL: "https://vtt-nodejs.herokuapp.com/api",
-  baseURL: "http://localhost:5000/api",
+  baseURL: "https://vtt-nodejs.herokuapp.com/api",
+  // baseURL: "http://localhost:5000/api",
 
   headers: {
     "Content-Type": "application/json",
