@@ -1,214 +1,184 @@
-import { ShoppingCart } from "@mui/icons-material";
-import AccountCircle from "@mui/icons-material/AccountCircle";
-import MailIcon from "@mui/icons-material/Mail";
-import MenuIcon from "@mui/icons-material/Menu";
-import MoreIcon from "@mui/icons-material/MoreVert";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import SearchIcon from "@mui/icons-material/Search";
-import AppBar from "@mui/material/AppBar";
-import Badge from "@mui/material/Badge";
-import Box from "@mui/material/Box";
-import IconButton from "@mui/material/IconButton";
-import InputBase from "@mui/material/InputBase";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import { alpha, styled } from "@mui/material/styles";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import * as React from "react";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import Link from "../../configs/mui/Link";
-import { userAction } from "../../features/auth/userSlice";
-const Search = styled("div")(({ theme }) => ({
-  position: "relative",
+import { ShoppingCart } from '@mui/icons-material';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import MoreIcon from '@mui/icons-material/MoreVert';
+import SearchIcon from '@mui/icons-material/Search';
+import { Button } from '@mui/material';
+import AppBar from '@mui/material/AppBar';
+import Badge from '@mui/material/Badge';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import { alpha, styled } from '@mui/material/styles';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import * as React from 'react';
+import { useForm } from 'react-hook-form';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import Link from '../../configs/mui/Link';
+import { userAction } from '../../features/auth/userSlice';
+import { cartAction } from '../../features/payment/cartSlice';
+import logo from '../../public/logo/logo2.jpg';
+import InputField from '../FormField/InputField';
+import Navbar from './Navbar';
+const Search = styled('form')(({ theme }) => ({
+  position: 'relative',
+  flexGrow: 1,
   borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  "&:hover": {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
+  color: 'black',
+  backgroundColor: alpha(theme.palette.common.white, 0.9),
+  '&:hover': {
+    backgroundColor: alpha(theme.palette.common.white, 1),
   },
   marginRight: theme.spacing(2),
   marginLeft: 0,
-  width: "100%",
-  [theme.breakpoints.up("sm")]: {
+  width: '100%',
+  [theme.breakpoints.up('sm')]: {
     marginLeft: theme.spacing(3),
-    width: "auto",
+    width: 'auto',
   },
 }));
 
-const SearchIconWrapper = styled("div")(({ theme }) => ({
+const SearchIconWrapper = styled(Button)(({ theme }) => ({
   padding: theme.spacing(0, 2),
-  height: "100%",
-  position: "absolute",
-  pointerEvents: "none",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
+  height: '100%',
+  position: 'absolute',
+  pointerEvents: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  right: '0px',
+  cursor: 'pointer',
 }));
 
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: "inherit",
-  "& .MuiInputBase-input": {
+const StyledInputBase = styled(InputField)(({ theme }) => ({
+  color: 'black',
+  width: '100%',
+  margin: '0px',
+  '& .MuiInputBase-input': {
     padding: theme.spacing(1, 1, 1, 0),
     // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("md")]: {
-      width: "20ch",
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('md')]: {
+      width: '100%',
     },
   },
 }));
-
+interface SearchField {
+  title: string;
+}
 export default function Header() {
+  const router = useRouter();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
-    React.useState<null | HTMLElement>(null);
+  const [opendrawer, setDrawer] = React.useState(false);
   const isMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const user = useAppSelector((state) => state.user);
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl(null);
+  const handleMobileMenuOpen = () => {
+    setDrawer(true);
   };
-
+  const closeDrawer = () => {
+    setDrawer(false);
+  };
   const handleMenuClose = () => {
     setAnchorEl(null);
-    handleMobileMenuClose();
   };
-
-  const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setMobileMoreAnchorEl(event.currentTarget);
+  const handleProfile = () => {
+    if (user.user.role !== 'user') {
+      router.push('/admin/dashboard');
+    } else {
+      router.push('/user/profile');
+    }
+    setAnchorEl(null);
   };
   const dispatch = useAppDispatch();
   const handleLogOut = async () => {
-    console.log("Log out clicked");
+    console.log('Log out clicked');
     dispatch(userAction.logoutUser());
+    setDrawer(false);
     setAnchorEl(null);
-    handleMobileMenuClose();
+    router.push('/');
   };
 
-  const menuId = "primary-search-account-menu";
+  const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
       anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
+        vertical: 'top',
+        horizontal: 'right',
       }}
       id={menuId}
       keepMounted
       transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
+        vertical: 'top',
+        horizontal: 'right',
       }}
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      <MenuItem onClick={handleProfile}>Profile</MenuItem>
       <MenuItem onClick={handleLogOut}>Sign Out</MenuItem>
     </Menu>
   );
-
-  const mobileMenuId = "primary-search-account-menu-mobile";
-  const renderMobileMenu = (
-    <Menu
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      id={mobileMenuId}
-      keepMounted
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
-    >
-      <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem>
-      <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
-          <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
-    </Menu>
-  );
-
+  const initalValue: SearchField = {
+    title: '',
+  };
+  const { control, handleSubmit, reset } = useForm({
+    mode: 'onSubmit',
+    defaultValues: initalValue,
+  });
+  const handlSubmitSeatch = (value: SearchField) => {
+    const search = value.title;
+    router.push(`/search?title[regex]=${search}`);
+    reset(initalValue);
+  };
+  React.useEffect(() => {
+    dispatch(cartAction.getcart());
+    if (localStorage.getItem('login')) {
+      dispatch(userAction.getAccessTokenFromRefreshToken());
+    }
+  }, [dispatch]);
+  const cartlist = useAppSelector((state) => state.cart.cartlist);
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar position="static" sx={{ background: '#0B2156' }}>
         <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
+          <Link
+            href="/"
             color="inherit"
-            aria-label="open drawer"
-            sx={{ mr: 2 }}
+            sx={{
+              textDecoration: 'none',
+              display: 'flex',
+              flexFlow: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
           >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ display: { xs: "none", sm: "block" } }}
-          >
-            <Link href="/" color="inherit" sx={{ textDecoration: "none" }}>
-              VTShop
-            </Link>
-          </Typography>
-          <Search>
-            <SearchIconWrapper>
+            <Image src={logo} alt="Logo picture " height="40px" width="100px" />
+            <Typography fontWeight="bold">VTMALL</Typography>
+          </Link>
+          <Search onSubmit={handleSubmit(handlSubmitSeatch)}>
+            <SearchIconWrapper type="submit">
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
               placeholder="Search…"
-              inputProps={{ "aria-label": "search" }}
+              name="title"
+              control={control}
+              label=""
+              margin="none"
+              size2="small"
             />
           </Search>
-          <Box sx={{ flexGrow: 1 }} />
-          <Box
-            sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}
-          >
-            <IconButton
-              size="large"
-              aria-label="show 4 new mails"
-              color="inherit"
-            >
-              <Badge badgeContent={4} color="error">
-                <ShoppingCart />
-              </Badge>
-            </IconButton>
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center' }}>
             {user.isLogin ? (
               <IconButton
                 size="large"
@@ -222,27 +192,48 @@ export default function Header() {
                 <AccountCircle />
               </IconButton>
             ) : (
-              <Typography
-                variant="h6"
-                noWrap
-                component="div"
-                sx={{ display: { xs: "none", sm: "block" } }}
+              <Link
+                href="/auth/login"
+                color="inherit"
+                sx={{
+                  textDecoration: 'none',
+                }}
               >
-                <Link
-                  href="/auth/login"
-                  color="inherit"
-                  sx={{ textDecoration: "none" }}
-                >
+                <Typography fontSize="14px">Hello,</Typography>
+                <Typography fontSize="14px" fontWeight="bold">
                   Sign In
-                </Link>
-              </Typography>
+                </Typography>
+              </Link>
             )}
+            <Box mx="20px">
+              <Link
+                href="/user/order"
+                color="inherit"
+                sx={{
+                  textDecoration: 'none',
+                }}
+              >
+                <Typography fontSize="14px"> Đơn hủy,</Typography>
+                <Typography fontSize="14px" fontWeight="bold">
+                  Đơn hàng
+                </Typography>
+              </Link>
+            </Box>
+            <Box component={Link} href="/cart" sx={{ color: 'inherit' }}>
+              <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+                <Badge badgeContent={cartlist?.length} color="error">
+                  <ShoppingCart fontSize="large" />
+                </Badge>
+                <Typography fontWeight="bold" fontSize="">
+                  Giỏ hàng
+                </Typography>
+              </IconButton>
+            </Box>
           </Box>
-          <Box sx={{ display: { xs: "flex", md: "none" } }}>
+          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
               aria-label="show more"
-              aria-controls={mobileMenuId}
               aria-haspopup="true"
               onClick={handleMobileMenuOpen}
               color="inherit"
@@ -252,8 +243,14 @@ export default function Header() {
           </Box>
         </Toolbar>
       </AppBar>
-      {renderMobileMenu}
       {renderMenu}
+      <Navbar
+        isAdmin={user.user.role as string}
+        openNavBar={opendrawer}
+        closeDrawer={closeDrawer}
+        isLogin={user.isLogin}
+        handleLogOut={handleLogOut}
+      />
     </Box>
   );
 }

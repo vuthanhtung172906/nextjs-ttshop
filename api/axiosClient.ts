@@ -1,16 +1,27 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+import { store } from './../app/store';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { checkTokenExp } from '../configs/checkTokenExp';
 
 const axiosClient = axios.create({
-  baseURL: "https://vtt-nodejs.herokuapp.com/api",
-  // baseURL: "http://localhost:5000/api",
-
+  baseURL: process.env.PROXY_SERVER,
+  // baseURL: 'http://localhost:5000',
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
 });
-
+axiosClient.defaults.withCredentials = true;
 axiosClient.interceptors.request.use(
   function (config: AxiosRequestConfig) {
+    let accesstoken = store.getState().user.access_token;
+    // const accesstoken = useAppSelector((state) => state.user.access_token);
+    if (accesstoken) {
+      checkTokenExp(accesstoken);
+      accesstoken = store.getState().user.access_token;
+    }
+    config['headers'] = {
+      'Content-Type': 'application/json',
+      Authorization: accesstoken,
+    };
     return config;
   },
   function (error) {

@@ -2,9 +2,13 @@ export interface User {
   email?: string;
   password?: string;
   passwordcomfirm?: string;
+  newpassword?: string;
   username?: string;
-  role?: boolean;
-  avatar?: string;
+  role?: string;
+  avatar?: {
+    public_id: string;
+    url: string;
+  };
   [key: string]: any;
 }
 export interface UserState {
@@ -12,4 +16,5 @@ export interface UserState {
   access_token: string;
   user: User;
   isLogin: boolean;
+  refresh_token?: string;
 }

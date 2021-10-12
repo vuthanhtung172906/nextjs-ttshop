@@ -1,102 +1,75 @@
-import { CacheProvider, EmotionCache } from "@emotion/react";
-import CssBaseline from "@mui/material/CssBaseline";
-import { ThemeProvider } from "@mui/material/styles";
-import withReduxSaga from "next-redux-saga";
-import App, { AppContext, AppInitialProps, AppProps } from "next/app";
-import Head from "next/head";
-import React, { useEffect } from "react";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { useAppDispatch } from "../app/hooks";
-import { wrapper } from "../app/store";
-import Layout from "../components/Layout";
-import createEmotionCache from "../configs/mui/createEmotionCache";
-import theme from "../configs/mui/theme";
-import { userAction } from "../features/auth/userSlice";
+import { CacheProvider, EmotionCache } from '@emotion/react';
+import CssBaseline from '@mui/material/CssBaseline';
+import { ThemeProvider } from '@mui/material/styles';
+import { AnimatePresence } from 'framer-motion';
+import { NextPage } from 'next';
+import withReduxSaga from 'next-redux-saga';
+import { DefaultSeo } from 'next-seo';
+import { AppProps } from 'next/app';
+import Head from 'next/head';
+import Router from 'next/router';
+import NProgress from 'nprogress';
+import React from 'react';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { wrapper } from '../app/store';
+import Footer from '../components/Layout/Footer';
+import Header from '../components/Layout/Header';
+import createEmotionCache from '../configs/mui/createEmotionCache';
+import theme from '../configs/mui/theme';
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
 
-interface MyAppProps2 extends AppContext {
-  emotionCache?: EmotionCache;
-}
 interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;
 }
-function MyApp(props: MyAppProps) {
+Router.events.on('routeChangeStart', () => {
+  NProgress.start();
+});
+Router.events.on('routeChangeComplete', () => {
+  NProgress.done();
+});
+Router.events.on('routeChangeError', () => {
+  NProgress.done();
+});
+const MyApp: NextPage<MyAppProps> = (props: MyAppProps) => {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    if (localStorage.getItem("login")) {
-      dispatch(userAction.getAccessTokenFromRefreshToken());
-    }
-  }, [dispatch]);
   return (
-    <CacheProvider value={clientSideEmotionCache}>
+    <CacheProvider value={emotionCache}>
       <Head>
         <title>My page</title>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" />
       </Head>
+      <DefaultSeo
+        openGraph={{
+          type: 'website',
+          locale: 'vi',
+          url: 'https://www.youtube.com/watch?v=_ds-1XnWvGg',
+        }}
+      />
       <ThemeProvider theme={theme}>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
-        <Layout>
-          <div>
-            <Component {...pageProps} />
-            <ToastContainer
-              position="top-right"
-              autoClose={5000}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-            />
-          </div>
-        </Layout>
+        <Header />
+        <AnimatePresence exitBeforeEnter initial={false} onExitComplete={() => window.scrollTo(0, 0)}>
+          <Component {...pageProps} />
+        </AnimatePresence>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
+        <Footer />
       </ThemeProvider>
     </CacheProvider>
   );
-}
-class YourApp extends App<AppInitialProps> {
-  public static getInitialProps = async ({ Component, ctx }: MyAppProps2) => {
-    let pageProps = {};
-    if (Component.getInitialProps) {
-      pageProps = await Component.getInitialProps(ctx);
-    }
-    return { pageProps };
-  };
-  render() {
-    const { Component, pageProps } = this.props;
-    return (
-      <CacheProvider value={clientSideEmotionCache}>
-        <Head>
-          <title>My page</title>
-          <meta name="viewport" content="initial-scale=1, width=device-width" />
-        </Head>
-        <ThemeProvider theme={theme}>
-          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-          <CssBaseline />
-          <Layout>
-            <div>
-              <Component {...pageProps} />
-              <ToastContainer
-                position="top-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-              />
-            </div>
-          </Layout>
-        </ThemeProvider>
-      </CacheProvider>
-    );
-  }
-}
+};
+
 export default wrapper.withRedux(withReduxSaga(MyApp));
