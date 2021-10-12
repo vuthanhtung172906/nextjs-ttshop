@@ -9,6 +9,7 @@ import Layout from '../../components/Layout';
 import { useAppDispatch } from '../../app/hooks';
 import { cartAction } from '../../features/payment/cartSlice';
 import { useRouter } from 'next/router';
+import { NextSeo } from 'next-seo';
 
 export interface ProductDetailProps {
   productdetail: IProduct;
@@ -80,107 +81,127 @@ export default function ProductDetail({ productdetail }: ProductDetailProps) {
   const [chooseCapacity, setCapacity] = useState<number>();
 
   return (
-    <Layout>
-      <Box sx={{ backgroundColor: '#E5E7EB', paddingY: '16px' }}>
-        <Paper elevation={1} sx={{ maxWidth: '1536px', marginX: 'auto', padding: '16px' }}>
-          <Grid container>
-            <Grid item xs={12} md={6} sx={{ padding: '16px' }}>
-              <Paper elevation={3} sx={{ padding: '40px' }}>
-                <Box sx={{ position: 'relative', width: '708px', height: '708px' }}>
-                  <Image src={productdetail.images[tab].url} alt="imagemain" layout="fill" objectFit="contain" />
-                </Box>
+    <>
+      <NextSeo
+        title={productdetail.title + '-Mua với giá cực rẻ tại TTSHOP'}
+        description="Xỉ lẻ điện thoại giá rẻ uy tín. Bảo hành 12 tháng. Miễn phí giao hàng trả hàng "
+        canonical="https://nextjs-ttshop.vercel.app/"
+        openGraph={{
+          url: 'https://nextjs-ttshop.vercel.app/',
+          title: 'IPHONE 13 XẢ KHO CỰC RẺ',
+          description: 'Iphone 13 hàng mới về với giá cự rẻ chỉ từ 13 triệu',
+          images: [
+            {
+              url: productdetail.images[0].url,
+              width: 1200,
+              height: 627,
+              alt: 'Điện thoại giá rẻ với VTT shop',
+            },
+          ],
+        }}
+      />
+      <Layout>
+        <Box sx={{ backgroundColor: '#E5E7EB', paddingY: '16px' }}>
+          <Paper elevation={1} sx={{ maxWidth: '1536px', marginX: 'auto', padding: '16px' }}>
+            <Grid container>
+              <Grid item xs={12} md={6} sx={{ padding: '16px' }}>
+                <Paper elevation={3} sx={{ padding: '20px' ,height:'100%'}}>
+                  <Box sx={{ position: 'relative', width: '100%', height: '100%' ,minHeight:'400px'}}>
+                    <Image src={productdetail.images[tab].url} alt="imagemain" layout="fill" objectFit="contain" />
+                  </Box>
+                  <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+                    {productdetail.images.map((state, index) => (
+                      <Box
+                        width="78px"
+                        height="78px"
+                        key={index}
+                        onClick={() => setImageActive(index)}
+                        sx={{
+                          cursor: 'pointer',
+                          marginRight: '5px',
+                          border: index === tab ? '4px solid #ED7172' : 'none',
+                          position: 'relative',
+                          transition: ' all 0.1s ease-in-out',
+                        }}
+                      >
+                        <Image src={state.url} alt="imagetab" layout="fill" objectFit="cover" />
+                      </Box>
+                    ))}
+                  </Box>
+                </Paper>
+              </Grid>
+              <Grid item xs={12} md={6} sx={{ padding: '16px' }}>
+                <Typography sx={{ fontSize: '24px', fontWeight: 'bold', textTransform: 'capitalize', color: '#000' }}>
+                  {productdetail.title}
+                </Typography>
+                <DisplayPrice>{productdetail.price.toLocaleString('de-DE')}</DisplayPrice>
+                <Typography marginTop="16px" fontSize="16px" color="#34d399" fontWeight="600">
+                  Kho: {productdetail.inStock}
+                </Typography>
                 <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-                  {productdetail.images.map((state, index) => (
-                    <Box
-                      width="78px"
-                      height="78px"
-                      key={index}
-                      onClick={() => setImageActive(index)}
+                  {productdetail.color?.map((state, idx) => (
+                    <Typography
                       sx={{
-                        cursor: 'pointer',
-                        marginRight: '5px',
-                        border: index === tab ? '4px solid #ED7172' : 'none',
-                        position: 'relative',
-                        transition: ' all 0.1s ease-in-out',
+                        border: '1px solid #999',
+                        borderRadius: '5px',
+                        margin: '8px',
+                        padding: '8px',
+                        backgroundColor: chooseColor === idx ? '#c0b6b6' : '#eee',
                       }}
+                      key={idx}
+                      onClick={() => setChooseColor(idx)}
                     >
-                      <Image src={state.url} alt="imagetab" layout="fill" objectFit="cover" />
-                    </Box>
+                      {state}
+                    </Typography>
                   ))}
                 </Box>
-              </Paper>
-            </Grid>
-            <Grid item xs={12} md={6} sx={{ padding: '16px' }}>
-              <Typography sx={{ fontSize: '24px', fontWeight: 'bold', textTransform: 'capitalize', color: '#000' }}>
-                {productdetail.title}
-              </Typography>
-              <DisplayPrice>{productdetail.price.toLocaleString('de-DE')}</DisplayPrice>
-              <Typography marginTop="16px" fontSize="16px" color="#34d399" fontWeight="600">
-                Kho: {productdetail.inStock}
-              </Typography>
-              <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-                {productdetail.color?.map((state, idx) => (
-                  <Typography
-                    sx={{
-                      border: '1px solid #999',
-                      borderRadius: '5px',
-                      margin: '8px',
-                      padding: '8px',
-                      backgroundColor: chooseColor === idx ? '#c0b6b6' : '#eee',
-                    }}
-                    key={idx}
-                    onClick={() => setChooseColor(idx)}
+                <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+                  {productdetail.capacity?.map((state, idx) => (
+                    <Typography
+                      sx={{
+                        border: '1px solid #999',
+                        borderRadius: '5px',
+                        margin: '8px',
+                        padding: '8px',
+                        backgroundColor: chooseCapacity === idx ? '#c0b6b6' : '#eee',
+                      }}
+                      onClick={() => setCapacity(idx)}
+                      key={idx}
+                    >
+                      {state}
+                    </Typography>
+                  ))}
+                </Box>
+                <Typography marginTop="16px" fontSize="20px" color="#374151">
+                  {productdetail.content}
+                </Typography>
+                <Grid container columns={{ xs: 13 }} sx={{ marginTop: '16px' }}>
+                  <Button
+                    variant="contained"
+                    color="info"
+                    size="large"
+                    component={Grid}
+                    item
+                    xs={6}
+                    sx={{ marginRight: '10px' }}
+                    onClick={() => handleAddToCart(productdetail)}
                   >
-                    {state}
-                  </Typography>
-                ))}
-              </Box>
-              <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-                {productdetail.capacity?.map((state, idx) => (
-                  <Typography
-                    sx={{
-                      border: '1px solid #999',
-                      borderRadius: '5px',
-                      margin: '8px',
-                      padding: '8px',
-                      backgroundColor: chooseCapacity === idx ? '#c0b6b6' : '#eee',
-                    }}
-                    onClick={() => setCapacity(idx)}
-                    key={idx}
-                  >
-                    {state}
-                  </Typography>
-                ))}
-              </Box>
-              <Typography marginTop="16px" fontSize="20px" color="#374151">
-                {productdetail.content}
-              </Typography>
-              <Grid container columns={{ xs: 13 }} sx={{ marginTop: '16px' }}>
-                <Button
-                  variant="contained"
-                  color="info"
-                  size="large"
-                  component={Grid}
-                  item
-                  xs={6}
-                  sx={{ marginRight: '10px' }}
-                  onClick={() => handleAddToCart(productdetail)}
-                >
-                  Thêm vào giỏ hàng
-                </Button>
-                <Button variant="contained" size="large" color="secondary" component={Grid} item xs={6}>
-                  Mua ngay
-                </Button>
+                    Thêm vào giỏ hàng
+                  </Button>
+                  <Button variant="contained" size="large" color="secondary" component={Grid} item xs={6}>
+                    Mua ngay
+                  </Button>
+                </Grid>
               </Grid>
             </Grid>
-          </Grid>
-          <Box padding="16px">
-            <Typography variant="h5">Mô tả chi tết</Typography>
-            <Typography>{productdetail.description}</Typography>
-          </Box>
-        </Paper>
-      </Box>
-    </Layout>
+            <Box padding="16px">
+              <Typography variant="h5">Mô tả chi tết</Typography>
+              <Typography>{productdetail.description}</Typography>
+            </Box>
+          </Paper>
+        </Box>
+      </Layout>
+    </>
   );
 }
 

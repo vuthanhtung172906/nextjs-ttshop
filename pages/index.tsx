@@ -47,22 +47,19 @@ export default function Index({ newestProduct, bestSale, samsunglist, iphonelist
       <NextSeo
         title="VTT Shop: Mua điện thoại giá rẻ"
         description="Xỉ lẻ điện thoại giá rẻ uy tín. Bảo hành 12 tháng. Miễn phí giao hàng trả hàng "
-        canonical="http://localhost:3000/"
+        canonical="https://nextjs-ttshop.vercel.app/"
         openGraph={{
-          url: 'http://localhost:3000/',
+          url: 'https://nextjs-ttshop.vercel.app/',
           title: 'IPHONE 13 XẢ KHO CỰC RẺ',
           description: 'Iphone 13 hàng mới về với giá cự rẻ chỉ từ 13 triệu',
           images: [
             {
-              url: 'http://localhost:3000/_next/image?url=%2F_next%2Fstatic%2Fimage%2Fcomponents%2FSlider%2FSliderImage%2Fslider3.fe15216008828280a5537735b9fe0bfb.jpg&w=1920&q=75',
+              url: 'https://nextjs-ttshop.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fimage%2Fcomponents%2FSlider%2FSliderImage%2Fslider3.fe15216008828280a5537735b9fe0bfb.jpg&w=1920&q=75',
               width: 1200,
               height: 627,
               alt: 'Điện thoại giá rẻ với VTT shop',
             },
           ],
-        }}
-        facebook={{
-          appId: '315661436147584',
         }}
       />
       <Layout>

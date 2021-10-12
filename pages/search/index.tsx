@@ -12,6 +12,7 @@ import {
   IconButton,
   InputLabel,
   MenuItem,
+  Pagination,
   Paper,
   Select,
   SelectChangeEvent,
@@ -45,7 +46,7 @@ export default function SearchPage({ productlist, categorylist }: SearchPageProp
   const query = router.query;
   const [openSidebar, setSiderbar] = useState(false);
   useEffect(() => {
-    if (filter !== '') {
+    if (filter) {
       (async () => {
         try {
           const queryParams = {
@@ -60,6 +61,18 @@ export default function SearchPage({ productlist, categorylist }: SearchPageProp
       })();
     }
   }, [filter, query]);
+  const changePagination = async (event:any, page: number) => {
+      try {
+        const newquery:IProductParams ={
+          ...query,
+          page: page
+        }
+        const productlist2 = await productApi.getProduct(newquery);
+        setProductSort(productlist2.products);
+      } catch (error) {
+        throw error
+      }
+  }
   const products = productsort.length === 0 ? productlist.products : productsort;
   return (
     <Layout>
@@ -77,7 +90,7 @@ export default function SearchPage({ productlist, categorylist }: SearchPageProp
         >
           <Box sx={{ display: 'flex', alignItems: 'center', flexDirection: 'row' }}>
             <Typography>
-              Kết quả tìm kiếm: {productlist.pagination._limit} / {productlist.pagination._totalCount}
+              Kết quả tìm kiếm: {productlist.pagination._limit } / {productlist.pagination._totalCount}
             </Typography>
             <IconButton onClick={() => setSiderbar(true)} sx={{ display: { xs: 'block', md: 'none' } }}>
               <FilterAltIcon fontSize="medium" />
@@ -133,6 +146,7 @@ export default function SearchPage({ productlist, categorylist }: SearchPageProp
             </AccordionDetails>
           </Accordion>
         </Box>
+        <Box>
         <Grid container columns={{ xs: 13, sm: 13, md: 13, lg: 13 }}>
           {products?.map((state, index) => (
             <Grid item key={index} xs={12} sm={6} md={4} lg={3} sx={{ marginX: '8px', marginBottom: '16px' }}>
@@ -140,7 +154,17 @@ export default function SearchPage({ productlist, categorylist }: SearchPageProp
             </Grid>
           ))}
         </Grid>
+        <Pagination
+          sx={{ marginY: '20px', display: 'flex', justifyContent: 'center' }}
+          count={Math.ceil(productlist.pagination?._totalCount / productlist.pagination?._limit)}
+          color="primary"
+          onChange={changePagination}
+        />
+
+        </Box>
+
       </Box>
+
     </Layout>
   );
 }

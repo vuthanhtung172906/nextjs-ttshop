@@ -45,7 +45,10 @@ const MyApp: NextPage<MyAppProps> = (props: MyAppProps) => {
         openGraph={{
           type: 'website',
           locale: 'vi',
-          url: 'https://www.youtube.com/watch?v=_ds-1XnWvGg',
+          url: 'https://nextjs-ttshop.vercel.app/',
+        }}
+        facebook={{
+          appId: '315661436147584',
         }}
       />
       <ThemeProvider theme={theme}>

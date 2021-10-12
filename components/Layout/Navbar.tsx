@@ -39,7 +39,6 @@ export default function Navbar({ openNavBar, closeDrawer, isLogin, handleLogOut,
         </ItemList>
         <ItemList href="/search?-sold">Nổi bật</ItemList>
         <ItemList href="/about">Voucher</ItemList>
-        <ItemList href="/about">Dịch vụ khách hàng</ItemList>
       </Box>
 
       <Drawer anchor="left" open={openNavBar} onClose={closeDrawer}>
