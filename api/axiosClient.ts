@@ -3,7 +3,7 @@ import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { checkTokenExp } from '../configs/checkTokenExp';
 
 const axiosClient = axios.create({
-  baseURL: process.env.PROXY_SERVER,
+  baseURL: process.env.PROXY_SERVER || 'https://vtt-nodejs.herokuapp.com',
   // baseURL: 'http://localhost:5000',
   headers: {
     'Content-Type': 'application/json',
