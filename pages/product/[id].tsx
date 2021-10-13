@@ -105,8 +105,8 @@ export default function ProductDetail({ productdetail }: ProductDetailProps) {
           <Paper elevation={1} sx={{ maxWidth: '1536px', marginX: 'auto', padding: '16px' }}>
             <Grid container>
               <Grid item xs={12} md={6} sx={{ padding: '16px' }}>
-                <Paper elevation={3} sx={{ padding: '20px' ,height:'100%'}}>
-                  <Box sx={{ position: 'relative', width: '100%', height: '100%' ,minHeight:'400px'}}>
+                <Paper elevation={3} sx={{ padding: '20px', height: '100%' }}>
+                  <Box sx={{ position: 'relative', width: '100%', height: '80%', minHeight: '400px' }}>
                     <Image src={productdetail.images[tab].url} alt="imagemain" layout="fill" objectFit="contain" />
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row' }}>

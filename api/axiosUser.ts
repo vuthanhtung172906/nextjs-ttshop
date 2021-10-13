@@ -29,5 +29,9 @@ const userApi = {
     const url = '/api/editprofile';
     return axiosClient.patch(url, formdata);
   },
+  googleLogin(tokenId: string): Promise<any> {
+    const url = '/api/googlelogin';
+    return axiosClient.post(url, { tokenId });
+  },
 };
 export default userApi;

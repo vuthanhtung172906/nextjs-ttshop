@@ -3,6 +3,7 @@ import { Box, styled } from '@mui/system';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import productApi from '../api/axiosProduct';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import Layout from '../components/Layout';
@@ -51,6 +52,9 @@ export default function Cart(props: CartProps) {
 
     dispatch(cartAction.deletecart(idx));
   };
+  const subtotalPrice = cartlist.reduce((total, currentvalue) => {
+    return total + (currentvalue.price as number) * (currentvalue.quantity as number);
+  }, 0);
   useEffect(() => {
     (async () => {
       try {
@@ -62,9 +66,14 @@ export default function Cart(props: CartProps) {
     })();
   }, [cartlist]);
   const handleToCheckout = () => {
-    router.push({
-      pathname: '/order/checkout',
-    });
+    if (cartlist.length === 0) {
+      toast.error('Vui lòng thêm sản phẩm vào giỏ hàng');
+      router.push('/');
+    } else {
+      router.push({
+        pathname: '/order/checkout',
+      });
+    }
   };
   return (
     <Layout>
@@ -137,7 +146,10 @@ export default function Cart(props: CartProps) {
         </Grid>
         <Grid item xs={12} sm={4} lg={2}>
           <Paper elevation={1} sx={{ padding: '8px', display: 'flex', flexDirection: 'column' }}>
-            <Typography> Tạm tính :</Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', padding: '10px' }}>
+              <Typography> Tạm tính : </Typography>
+              <DisplayPrice sx={{ marginTop: '0px' }}>{subtotalPrice.toLocaleString('de-DE')}</DisplayPrice>
+            </Box>
             {isLogin ? (
               <Button variant="contained" color="secondary" onClick={handleToCheckout}>
                 Tiến hành thanh toán
@@ -146,9 +158,6 @@ export default function Cart(props: CartProps) {
               <>
                 <Button variant="contained" disabled color="info">
                   Đăng nhập để đặt hàng
-                </Button>
-                <Button variant="contained" color="secondary">
-                  Đặt hàng khồng cần tài khoản
                 </Button>
               </>
             )}

@@ -52,7 +52,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       <Typography sx={{ textTransform: 'capitalize', fontSize: '20px', marginY: '16px' }}>{product.title}</Typography>
       <Description>{product.description}</Description>
       <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginY: '8px', width:'100%' }}>
-        <DisplayPrice>{product.price}</DisplayPrice>
+        <DisplayPrice>{product.price.toLocaleString('de-DE')}</DisplayPrice>
         <Typography sx={{ color: '#3b82f6', fontSize: '18px' }}>Đã bán: {product.sold}</Typography>
       </Box>
       </Box>

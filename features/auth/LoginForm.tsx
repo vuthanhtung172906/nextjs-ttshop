@@ -7,6 +7,14 @@ import { Box } from '@mui/system';
 import Link from '../../configs/mui/Link';
 import InputField from '../../components/FormField/InputField';
 import { User } from '../../types';
+import { GoogleLogin } from 'react-google-login';
+import userApi from '../../api/axiosUser';
+import { useAppDispatch } from '../../app/hooks';
+import { userAction } from './userSlice';
+import { useRouter } from 'next/router';
+import { toast } from 'react-toastify';
+import { Google } from '@mui/icons-material';
+
 export interface LoginFormProps {
   initialvalue: User;
   onSubmit: (formValue: User) => void;
@@ -23,6 +31,7 @@ export default function LoginForm({ initialvalue, onSubmit }: LoginFormProps) {
         'Minimum eight characters, at least one letter and one number'
       ),
   });
+  const router = useRouter();
   const {
     control,
     handleSubmit,
@@ -34,6 +43,22 @@ export default function LoginForm({ initialvalue, onSubmit }: LoginFormProps) {
   });
   const handleOnSubmit = async (formValue: User) => {
     await onSubmit(formValue);
+  };
+  const dispatch = useAppDispatch();
+  const responseGoogle = async (response: any) => {
+    try {
+      const res = await userApi.googleLogin(response.tokenId);
+      dispatch(userAction.getUserSucces(res));
+      localStorage.setItem('login', 'true');
+      localStorage.setItem('accesstoken', res.access_token);
+      toast.success('Login Success');
+      router.push('/');
+    } catch (error) {
+      throw error;
+    }
+  };
+  const responseFacebook = (response: any) => {
+    console.log({ response });
   };
   return (
     <div>
@@ -57,6 +82,25 @@ export default function LoginForm({ initialvalue, onSubmit }: LoginFormProps) {
             Create new account
           </Link>
         </Typography>
+      </Box>
+      <Box sx={{ marginTop: '10px' }}>
+        <GoogleLogin
+          clientId="741489416671-879jd1j1adptivdh5ct5j24c6ugaf73d.apps.googleusercontent.com"
+          buttonText="Login with Google"
+          onSuccess={responseGoogle}
+          cookiePolicy={'single_host_origin'}
+          render={(renderProps) => (
+            <Button
+              onClick={renderProps.onClick}
+              disabled={renderProps.disabled}
+              startIcon={<Google />}
+              variant="outlined"
+              fullWidth
+            >
+              LOG IN WITH GOOGLE
+            </Button>
+          )}
+        />
       </Box>
     </div>
   );
