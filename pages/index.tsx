@@ -54,7 +54,7 @@ export default function Index({ newestProduct, bestSale, samsunglist, iphonelist
           description: 'Iphone 13 hàng mới về với giá cự rẻ chỉ từ 13 triệu',
           images: [
             {
-              url: 'https://nextjs-ttshop.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fimage%2Fcomponents%2FSlider%2FSliderImage%2Fslider3.fe15216008828280a5537735b9fe0bfb.jpg&w=1920&q=75',
+              url: 'https://res.cloudinary.com/tungvuthanh20172906/image/upload/v1634032280/user/slider/S21-830-300-830x300-3_ymcket.png',
               width: 1200,
               height: 627,
               alt: 'Điện thoại giá rẻ với VTT shop',
