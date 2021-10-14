@@ -20,7 +20,7 @@ const DisplayPrice = styled(Typography)`
   font-weight: bold;
   color: #dc2626;
   &::after {
-    padding-left: 5px;
+    padding-left: 2px;
     content: '₫';
     position: absolute;
     top: 1px;
@@ -42,21 +42,28 @@ export default function ProductCard({ product }: ProductCardProps) {
   return (
     <PaperImage
       onClick={() => handleClick(product._id as string)}
-      sx={{ width: '100%', display: 'flex', flexFlow: 'column nowrap', padding: '20px' ,alignItems:'center'}}
+      sx={{ width: '100%', display: 'flex', flexFlow: 'column nowrap', padding: '20px', alignItems: 'center' }}
       elevation={2}
     >
-      <Box sx={{ width: '251px', height: '251px', position: 'relative',display:'flex' }}>
+      <Box sx={{ width: '100%', height: '251px', position: 'relative', display: 'flex' }}>
         <Image src={product.images[0].url} layout="fill" objectFit="contain" alt={product.title} />
       </Box>
-      <Box sx={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center'}}>
-      <Typography sx={{ textTransform: 'capitalize', fontSize: '20px', marginY: '16px' }}>{product.title}</Typography>
-      <Description>{product.description}</Description>
-      <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginY: '8px', width:'100%' }}>
-        <DisplayPrice>{product.price.toLocaleString('de-DE')}</DisplayPrice>
-        <Typography sx={{ color: '#3b82f6', fontSize: '18px' }}>Đã bán: {product.sold}</Typography>
+      <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+        <Typography sx={{ textTransform: 'capitalize', fontSize: '20px', marginY: '16px' }}>{product.title}</Typography>
+        <Description>{product.description}</Description>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'flex-start',
+            justifyContent: 'space-between',
+            marginY: '8px',
+            width: '100%',
+          }}
+        >
+          <DisplayPrice>{product.price.toLocaleString('de-DE')}</DisplayPrice>
+          <Typography sx={{ color: '#3b82f6', fontSize: '18px' }}>Đã bán: {product.sold}</Typography>
+        </Box>
       </Box>
-      </Box>
-
     </PaperImage>
   );
 }

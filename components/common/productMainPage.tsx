@@ -46,33 +46,33 @@ export default function ProductMainPage({ products, letter }: ProductMainPagePro
         columns={{ xs: 6, sm: 14, md: 18, lg: 16 }}
         sx={{ width: '100%', height: '100%' }}
       >
-        <Grid item xs={6} sm={4} md={4} lg={3} sx={{ marginRight: '16px' }}>
+        <Grid item xs={6} sm={6} md={5} lg={3} sx={{ marginRight: '16px' }}>
           <ProductCard product={products[0]} />
         </Grid>
-        <Grid item xs={6} sm={4} md={4} lg={3} sx={{ marginRight: '16px' }}>
+        <Grid item xs={6} sm={6} md={5} lg={3} sx={{ marginRight: '16px' }}>
           <ProductCard product={products[1]} />
         </Grid>
         <Grid
           item
           xs={6}
-          sm={4}
-          md={4}
+          sm={6}
+          md={5}
           lg={3}
-          sx={{ display: { xs: 'none', sm: 'block', md: 'block', lg: 'block' }, marginRight: '16px' }}
+          sx={{ display: { xs: 'none', sm: 'none', md: 'block', lg: 'block' }, marginRight: '16px' }}
         >
           <ProductCard product={products[2]} />
         </Grid>
         <Grid
           item
           xs={6}
-          sm={4}
-          md={4}
+          sm={6}
+          md={5}
           lg={3}
-          sx={{ display: { xs: 'none', sm: 'none', md: 'block', lg: 'block' }, marginRight: '16px' }}
+          sx={{ display: { xs: 'none', sm: 'none', md: 'none', lg: 'block' }, marginRight: '16px' }}
         >
           <ProductCard product={products[3]} />
         </Grid>
-        <Grid item xs={6} sm={4} md={4} lg={3} sx={{ display: { xs: 'none', sm: 'none', md: 'none', lg: 'block' } }}>
+        <Grid item xs={6} sm={6} md={5} lg={3} sx={{ display: { xs: 'none', sm: 'none', md: 'none', lg: 'block' } }}>
           <ProductCard product={products[4]} />
         </Grid>
       </Grid>
