@@ -24,7 +24,7 @@ function* getAccessToken() {
     localStorage.setItem('accesstoken', res.access_token);
     yield put(userAction.getAccessTokenSuccess(res));
   } catch (error) {
-    console.log('Log out saga');
+    console.log(error);
     yield put(userAction.logoutUser());
   }
 }
