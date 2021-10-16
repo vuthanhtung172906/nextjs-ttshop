@@ -118,5 +118,6 @@ export const getStaticProps: GetStaticProps = async () => {
       iphonelist: iphonelist.products,
       samsunglist: samsunglist.products,
     },
+    revalidate: 300,
   };
 };
