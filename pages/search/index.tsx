@@ -19,7 +19,7 @@ import {
   Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import categoryApi from '../../api/axiosCategory';
@@ -61,18 +61,18 @@ export default function SearchPage({ productlist, categorylist }: SearchPageProp
       })();
     }
   }, [filter, query]);
-  const changePagination = async (event:any, page: number) => {
-      try {
-        const newquery:IProductParams ={
-          ...query,
-          page: page
-        }
-        const productlist2 = await productApi.getProduct(newquery);
-        setProductSort(productlist2.products);
-      } catch (error) {
-        throw error
-      }
-  }
+  const changePagination = async (event: any, page: number) => {
+    try {
+      const newquery: IProductParams = {
+        ...query,
+        page: page,
+      };
+      const productlist2 = await productApi.getProduct(newquery);
+      setProductSort(productlist2.products);
+    } catch (error) {
+      throw error;
+    }
+  };
   const products = productsort.length === 0 ? productlist.products : productsort;
   return (
     <Layout>
@@ -90,7 +90,7 @@ export default function SearchPage({ productlist, categorylist }: SearchPageProp
         >
           <Box sx={{ display: 'flex', alignItems: 'center', flexDirection: 'row' }}>
             <Typography>
-              Kết quả tìm kiếm: {productlist.pagination._limit } / {productlist.pagination._totalCount}
+              Kết quả tìm kiếm: {productlist.pagination._limit} / {productlist.pagination._totalCount}
             </Typography>
             <IconButton onClick={() => setSiderbar(true)} sx={{ display: { xs: 'block', md: 'none' } }}>
               <FilterAltIcon fontSize="medium" />
@@ -147,29 +147,27 @@ export default function SearchPage({ productlist, categorylist }: SearchPageProp
           </Accordion>
         </Box>
         <Box>
-        <Grid container columns={{ xs: 13, sm: 13, md: 13, lg: 13 }}>
-          {products?.map((state, index) => (
-            <Grid item key={index} xs={12} sm={6} md={4} lg={3} sx={{ marginX: '8px', marginBottom: '16px' }}>
-              <ProductCard product={state} />
-            </Grid>
-          ))}
-        </Grid>
-        <Pagination
-          sx={{ marginY: '20px', display: 'flex', justifyContent: 'center' }}
-          count={Math.ceil(productlist.pagination?._totalCount / productlist.pagination?._limit)}
-          color="primary"
-          onChange={changePagination}
-        />
-
+          <Grid container columns={{ xs: 13, sm: 13, md: 13, lg: 13 }}>
+            {products?.map((state, index) => (
+              <Grid item key={index} xs={12} sm={6} md={4} lg={3} sx={{ marginX: '8px', marginBottom: '16px' }}>
+                <ProductCard product={state} />
+              </Grid>
+            ))}
+          </Grid>
+          <Pagination
+            sx={{ marginY: '20px', display: 'flex', justifyContent: 'center' }}
+            count={Math.ceil(productlist.pagination?._totalCount / productlist.pagination?._limit)}
+            color="primary"
+            onChange={changePagination}
+          />
         </Box>
-
       </Box>
-
     </Layout>
   );
 }
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  const getProduct = await productApi.getProduct(query as IProductParams);
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
+  context.res.setHeader('Cache-Control', 's-maxage=5 , stale-while-revalidate');
+  const getProduct = await productApi.getProduct(context.query as IProductParams);
   const categorylist = await categoryApi.get();
   return {
     props: {

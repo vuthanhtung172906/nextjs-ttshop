@@ -24,7 +24,7 @@ export default function Sidebar({ categorylist, openSidebar, closeDrawer }: Side
             <ListItemText>Tất cả</ListItemText>
           </ListItemButton>
         </ListItem>
-        <ListItem component={Link} href="/search?-sold">
+        <ListItem component={Link} href="/search?sort=-sold">
           <ListItemButton>
             <ListItemIcon>
               <Label />
@@ -54,7 +54,7 @@ export default function Sidebar({ categorylist, openSidebar, closeDrawer }: Side
               <ListItemText>Tất cả</ListItemText>
             </ListItemButton>
           </ListItem>
-          <ListItem component={Link} href="/search?-sold">
+          <ListItem component={Link} href="/search?sort=-sold">
             <ListItemButton>
               <ListItemIcon>
                 <Label />

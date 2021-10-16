@@ -1,15 +1,15 @@
-import { Grid, Paper, Typography, styled, Button } from '@mui/material';
+import { Button, Grid, Paper, styled, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import { GetServerSideProps } from 'next';
-import React, { useEffect, useState } from 'react';
-import productApi from '../../api/axiosProduct';
-import { IProduct } from '../../types';
-import Image from 'next/image';
-import Layout from '../../components/Layout';
-import { useAppDispatch } from '../../app/hooks';
-import { cartAction } from '../../features/payment/cartSlice';
-import { useRouter } from 'next/router';
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { NextSeo } from 'next-seo';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import React, { useState } from 'react';
+import productApi from '../../api/axiosProduct';
+import { useAppDispatch } from '../../app/hooks';
+import Layout from '../../components/Layout';
+import { cartAction } from '../../features/payment/cartSlice';
+import { IProduct } from '../../types';
 
 export interface ProductDetailProps {
   productdetail: IProduct;
@@ -205,7 +205,8 @@ export default function ProductDetail({ productdetail }: ProductDetailProps) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
+  context.res.setHeader('Cache-Control', 's-maxage=5 , stale-while-revalidate');
   const productdetail = await productApi.getProductDetail(context.query.id as string);
   return {
     props: {
